@@ -4,440 +4,870 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#171b36">
+
     <title>Student Dashboard | StudentAI</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --primary: #6d5dfc;
+            --primary-dark: #5142d9;
+            --bg: #f5f6fc;
+            --text: #20243a;
+            --muted: #8990a5;
+            --sidebar: #171b36;
+            --white: #ffffff;
+            --border: #edf0f7;
+            --green: #16a36a;
+            --red: #e05260;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background: #f5f6fc;
-            color: #252744;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* DESKTOP SIDEBAR */
 
         .sidebar {
             width: 255px;
             height: 100vh;
-            background: #242044;
             position: fixed;
-            left: 0;
             top: 0;
-            padding: 28px 18px;
-            color: white;
+            left: 0;
+            z-index: 100;
+            background: var(--sidebar);
+            padding: 27px 18px;
+            display: flex;
+            flex-direction: column;
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: white;
             font-size: 23px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 42px;
+            font-weight: 800;
+            margin: 0 8px 45px;
         }
 
         .logo span {
             color: #a99cff;
         }
 
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #6655ed, #a855f7);
+            border-radius: 13px;
+            font-size: 21px;
+        }
+
         .nav-title {
-            font-size: 11px;
-            color: #aaa6c5;
-            margin: 20px 12px 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #8990ad;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 0 13px;
+            margin-bottom: 14px;
         }
 
-        .sidebar a {
-            display: block;
-            text-decoration: none;
-            color: #d2cee9;
-            padding: 13px 14px;
-            border-radius: 9px;
-            margin-bottom: 7px;
-            font-size: 14px;
-            transition: 0.3s;
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
         }
 
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: #51468c;
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 13px;
+            color: #c4c8dc;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 11px;
+            transition: .25s;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: linear-gradient(100deg, #5142d9, #8272ef);
             color: white;
         }
 
-        .logout {
-            position: absolute;
-            bottom: 25px;
-            left: 18px;
-            right: 18px;
-            background: #45385f;
+        .nav-icon {
+            font-size: 17px;
         }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .logout {
+            display: block;
+            padding: 14px;
+            color: #ffb4bd;
+            background: rgba(239, 68, 68, .13);
+            border-radius: 11px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* MAIN */
 
         .main {
             margin-left: 255px;
-            padding: 30px;
+            padding: 32px 38px;
+            max-width: 1700px;
+            min-width: 0;
         }
 
         .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 28px;
+            gap: 15px;
+            margin-bottom: 27px;
         }
 
         .topbar h2 {
-            font-size: 24px;
+            font-size: 22px;
+        }
+
+        .topbar p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 6px;
         }
 
         .profile {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 600;
+            gap: 10px;
+            padding: 9px 15px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 13px;
         }
 
         .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #6558df;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .welcome {
-            background: linear-gradient(120deg, #6558df, #9285f2);
-            color: white;
-            padding: 30px;
-            border-radius: 18px;
-            margin-bottom: 25px;
-        }
-
-        .welcome h1 {
-            font-size: 27px;
-            margin-bottom: 10px;
-        }
-
-        .welcome p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .cards {
+            width: 39px;
+            height: 39px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            margin-bottom: 28px;
+            place-items: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6555ec, #9877f7);
         }
 
-        .card {
-            background: white;
-            padding: 23px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+        .profile strong {
+            font-size: 12px;
         }
 
-        .card h4 {
-            color: #85899d;
-            font-size: 13px;
-            margin-bottom: 13px;
-            font-weight: 500;
-        }
-
-        .card h2 {
-            font-size: 27px;
-            color: #282747;
-        }
-
-        .card small {
-            color: #9295a7;
+        .profile small {
             display: block;
-            margin-top: 8px;
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 4px;
         }
 
-        .section {
-            background: white;
-            padding: 25px;
-            border-radius: 17px;
+        /* HERO */
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 37px;
+            border-radius: 22px;
+            color: white;
+            background: linear-gradient(115deg, #3930a7, #6659e8 60%, #9875f5);
+            box-shadow: 0 12px 30px rgba(79, 70, 229, .16);
             margin-bottom: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            right: -75px;
+            top: -100px;
+            border: 38px solid rgba(255, 255, 255, .09);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 8px 12px;
+            margin-bottom: 17px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, .16);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 29px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .hero p {
+            color: #e9e8ff;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 21px;
+        }
+
+        .primary-btn {
+            display: inline-block;
+            padding: 13px 19px;
+            background: white;
+            color: #5142d9;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            transition: .2s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* STATISTICS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            padding: 23px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, .035);
+            transition: .25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-icon {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .purple {
+            background: #ede9fe;
+        }
+
+        .blue {
+            background: #dbeafe;
+        }
+
+        .green {
+            background: #dcfce7;
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .stat-card h2 {
+            font-size: 27px;
+            margin: 9px 0 5px;
+        }
+
+        .stat-card small {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* SECTION */
+
+        .section-card {
+            padding: 25px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, .035);
+            min-width: 0;
         }
 
         .section-heading {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .prediction-result {
-            background: #f6f5ff;
-            padding: 22px;
-            border-radius: 13px;
-            border-left: 5px solid #6558df;
-        }
-
-        .prediction-result h3 {
-            color: #6558df;
-            font-size: 23px;
-            margin: 10px 0;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .detail {
-            background: #f8f8fc;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .detail span {
-            display: block;
-            font-size: 12px;
-            color: #85899d;
-            margin-bottom: 8px;
-        }
-
-        .detail strong {
-            font-size: 17px;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 30px 15px;
-            color: #85899d;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #6558df;
-            color: white;
-            padding: 11px 19px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 13px;
-            margin-top: 15px;
-        }
-
-        .explore-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 17px;
-        }
-
-        .explore-card {
-            background: #f8f8ff;
-            padding: 20px;
-            border-radius: 13px;
-            border: 1px solid #ededfa;
-        }
-
-        .explore-card h3 {
-            font-size: 16px;
-            margin-bottom: 9px;
-        }
-
-        .explore-card p {
-            color: #85899d;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        /* PERFORMANCE TRACKER */
-
-        .tracker-section {
-            background: white;
-            padding: 25px;
-            border-radius: 18px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
-        }
-
-        .tracker-heading {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 22px;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 21px;
         }
 
-        .tracker-heading h2 {
-            font-size: 21px;
-            margin-bottom: 7px;
+        .section-heading h2 {
+            font-size: 17px;
         }
 
-        .tracker-heading p {
-            color: #85899d;
-            font-size: 13px;
+        .section-heading span {
+            color: var(--muted);
+            font-size: 11px;
         }
 
-        .tracker-icon {
-            font-size: 30px;
+        /* LATEST PREDICTION */
+
+        .prediction-box {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 20px;
+        }
+
+        .performance-box {
+            padding: 24px;
+            border-radius: 15px;
+            background: linear-gradient(140deg, #eef2ff, #f5f3ff);
+            border: 1px solid #e0e7ff;
+        }
+
+        .performance-box small {
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .performance-box h2 {
+            color: #5142d9;
+            font-size: 29px;
+            margin: 15px 0 9px;
+            overflow-wrap: anywhere;
+        }
+
+        .performance-box p {
+            color: #64748b;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .detail-item {
+            padding: 17px;
+            background: #f8f9fd;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 0;
+        }
+
+        .detail-item small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-bottom: 9px;
+        }
+
+        .detail-item strong {
+            font-size: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        /* IMPROVEMENT TRACKER */
+
+        .tracker-note {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+            margin-top: 15px;
         }
 
         .tracker-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px;
         }
 
-        .tracker-card {
-            background: #f8f8ff;
-            border: 1px solid #ededfa;
-            padding: 20px;
-            border-radius: 14px;
+        .tracker-item {
+            padding: 17px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #fafaff;
+            min-width: 0;
         }
 
-        .tracker-label {
-            color: #777b91;
-            font-size: 13px;
-            margin-bottom: 12px;
+        .tracker-item small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-bottom: 8px;
         }
 
-        .tracker-value {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .tracker-card p {
-            color: #9295a7;
-            font-size: 12px;
+        .tracker-item strong {
+            font-size: 21px;
         }
 
         .positive {
-            color: #16a36a;
+            color: var(--green);
         }
 
         .negative {
-            color: #e05252;
+            color: var(--red);
         }
 
         .neutral {
-            color: #777b91;
+            color: #64748b;
         }
 
-        .tracker-note {
-            background: #f2f3ff;
-            color: #666b87;
+        .suggestion-list {
+            display: grid;
+            gap: 11px;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
             padding: 14px;
-            border-radius: 10px;
-            margin-top: 18px;
+            background: #f8f9ff;
+            border: 1px solid #ecebff;
+            border-radius: 12px;
+        }
+
+        .suggestion-item span {
+            font-size: 18px;
+        }
+
+        .suggestion-item p {
+            color: #586078;
             font-size: 12px;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
-        .tracker-empty {
+        /* EXPLORE */
+
+        .explore-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .explore-item {
+            display: block;
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: .25s;
+        }
+
+        .explore-item:hover {
+            transform: translateY(-4px);
+            border-color: #c7d2fe;
+            background: #fafaff;
+        }
+
+        .explore-icon {
+            font-size: 25px;
+            margin-bottom: 13px;
+        }
+
+        .explore-item h3 {
+            color: #334155;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .explore-item p {
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        /* EMPTY STATE */
+
+        .empty-state {
+            padding: 32px 15px;
             text-align: center;
-            padding: 35px 15px;
+            background: #f8f9fd;
+            border-radius: 14px;
         }
 
-        .empty-icon {
+        .empty-state div {
             font-size: 38px;
             margin-bottom: 12px;
         }
 
-        .tracker-empty h3 {
-            margin-bottom: 9px;
+        .empty-state h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
         }
 
-        .tracker-empty p {
-            color: #85899d;
-            font-size: 13px;
-            margin-bottom: 18px;
+        .empty-state p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 17px;
         }
 
-        .tracker-button {
-            display: inline-block;
-            background: #6558df;
-            color: white;
-            padding: 11px 20px;
-            border-radius: 9px;
-            text-decoration: none;
-            font-size: 13px;
+        .footer {
+            text-align: center;
+            padding: 18px 10px;
+            color: #9aa1b4;
+            font-size: 10px;
         }
 
-        /* PERSONALIZED SUGGESTIONS */
+        /* TABLET */
 
-        .suggestion-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .suggestion-card {
-            background: #f8f8ff;
-            border: 1px solid #ededfa;
-            border-left: 4px solid #6558df;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .suggestion-card h3 {
-            color: #302b59;
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-
-        .suggestion-card p {
-            color: #777b91;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
-        @media (max-width: 900px) {
-            .cards {
-                grid-template-columns: repeat(2, 1fr);
+        @media (max-width: 1000px) {
+            .main {
+                padding: 25px;
             }
 
-            .details-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .explore-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            body {
+                overflow-x: hidden;
+            }
+
+            .sidebar {
+                width: 100% !important;
+                height: auto !important;
+                min-height: 0 !important;
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                padding: 13px 12px 12px !important;
+                display: block !important;
+                border-bottom: 1px solid rgba(255, 255, 255, .1);
+            }
+
+            .logo {
+                margin: 0 5px 12px;
+                font-size: 21px;
+                justify-content: center;
+            }
+
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+
+            .nav-title {
+                display: none !important;
+            }
+
+            .nav-links {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                gap: 8px;
+                overflow-x: auto !important;
+                overflow-y: hidden;
+                padding: 2px 1px 8px;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-links::-webkit-scrollbar {
+                display: none;
+            }
+
+            .nav-links a {
+                display: flex !important;
+                flex: 0 0 auto !important;
+                width: auto !important;
+                gap: 6px;
+                padding: 11px 13px !important;
+                font-size: 11px !important;
+                border-radius: 10px;
+                white-space: nowrap;
+            }
+
+            .nav-icon {
+                display: inline !important;
+                font-size: 13px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 5px;
+            }
+
+            .logout {
+                display: inline-block;
+                padding: 9px 14px;
+                font-size: 11px;
+            }
+
+            .main {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 17px 14px !important;
+            }
+
+            .topbar {
+                align-items: center;
+                margin-bottom: 19px;
+                gap: 10px;
+            }
+
+            .topbar h2 {
+                font-size: 18px;
+            }
+
+            .topbar p {
+                font-size: 10px;
+                line-height: 1.5;
+            }
+
+            .profile {
+                padding: 6px 9px;
+                gap: 7px;
+            }
+
+            .avatar {
+                width: 33px;
+                height: 33px;
+                font-size: 12px;
+            }
+
+            .profile strong {
+                font-size: 10px;
+            }
+
+            .profile small {
+                display: none;
+            }
+
+            .hero {
+                padding: 23px 19px;
+                border-radius: 17px;
+                margin-bottom: 18px;
+            }
+
+            .hero-tag {
+                font-size: 8px;
+                padding: 7px 9px;
+            }
+
+            .hero h1 {
+                font-size: 22px;
+                line-height: 1.4;
+            }
+
+            .hero p {
+                font-size: 12px;
+                line-height: 1.7;
+            }
+
+            .primary-btn {
+                padding: 12px 14px;
+                font-size: 11px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 11px;
+                margin-bottom: 18px;
+            }
+
+            .stat-card {
+                padding: 15px;
+                border-radius: 14px;
+            }
+
+            .stat-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 17px;
+                margin-bottom: 12px;
+            }
+
+            .stat-card p {
+                font-size: 9px;
+            }
+
+            .stat-card h2 {
+                font-size: 22px;
+            }
+
+            .stat-card small {
+                font-size: 9px;
+            }
+
+            .section-card {
+                padding: 17px 14px;
+                margin-bottom: 17px;
+                border-radius: 15px;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                margin-bottom: 16px;
+            }
+
+            .section-heading h2 {
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            .section-heading span {
+                font-size: 9px;
+            }
+
+            .prediction-box {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .performance-box {
+                padding: 19px;
+            }
+
+            .performance-box h2 {
+                font-size: 25px;
+            }
+
+            .detail-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 9px;
+            }
+
+            .detail-item {
+                padding: 13px 11px;
+            }
+
+            .detail-item strong {
+                font-size: 16px;
+            }
+
+            .tracker-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 9px;
+            }
+
+            .tracker-item {
+                padding: 13px 10px;
+            }
+
+            .tracker-item strong {
+                font-size: 18px;
+            }
+
+            .suggestion-item {
+                padding: 12px;
+            }
+
+            .suggestion-item p {
+                font-size: 11px;
             }
 
             .explore-grid {
                 grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .explore-item {
+                padding: 16px;
+            }
+
+            .explore-icon {
+                font-size: 21px;
+                margin-bottom: 8px;
+            }
+
+            .explore-item h3 {
+                font-size: 12px;
+            }
+
+            .explore-item p {
+                font-size: 10px;
             }
         }
 
-        @media (max-width: 650px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
+        @media (max-width: 380px) {
+
+            .topbar {
+                align-items: flex-start;
             }
 
-            .logo {
-                margin-bottom: 15px;
+            .profile {
+                max-width: 125px;
             }
 
-            .logout {
-                position: static;
-                margin-top: 10px;
+            .profile strong {
+                overflow-wrap: anywhere;
             }
 
-            .main {
-                margin-left: 0;
-                padding: 18px;
-            }
-
-            .cards,
-            .tracker-grid,
-            .suggestion-list {
+            .stats {
                 grid-template-columns: 1fr;
             }
 
-            .topbar h2 {
-                font-size: 19px;
+            .hero h1 {
+                font-size: 20px;
             }
 
-            .welcome h1 {
-                font-size: 22px;
+            .detail-grid,
+            .tracker-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -445,109 +875,194 @@
 
 <body>
 
-    <div class="sidebar">
+    <!-- SIDEBAR / MOBILE NAVIGATION -->
 
-        <div class="logo">Student<span>AI</span></div>
+    <aside class="sidebar">
 
-        <div class="nav-title">Main Menu</div>
+        <div class="logo">
+            <div class="logo-icon">🎓</div>
+            <div>Student<span>AI</span></div>
+        </div>
 
-        <a href="{{ url_for('dashboard') }}" class="active">🏠 Dashboard</a>
-        <a href="{{ url_for('prediction') }}">🤖 Predict Performance</a>
-        <a href="{{ url_for('history') }}">📋 Prediction History</a>
-        <a href="{{ url_for('analytics') }}">📊 Analytics</a>
+        <div class="nav-title">MAIN MENU</div>
 
-        <div class="nav-title">Account</div>
+        <nav class="nav-links">
 
-        <a href="{{ url_for('download_report') }}">📥 Download Report</a>
-        <a href="{{ url_for('logout') }}" class="logout">🚪 Logout</a>
+            <a href="{{ url_for('dashboard') }}" class="active">
+                <span class="nav-icon">🏠</span>
+                Dashboard
+            </a>
 
-    </div>
+            <a href="{{ url_for('prediction') }}">
+                <span class="nav-icon">🤖</span>
+                Predict Performance
+            </a>
 
-    <div class="main">
+            <a href="{{ url_for('history') }}">
+                <span class="nav-icon">📋</span>
+                Prediction History
+            </a>
 
-        <div class="topbar">
+            <a href="{{ url_for('analytics') }}">
+                <span class="nav-icon">📊</span>
+                Analytics
+            </a>
 
-            <h2>Student Dashboard</h2>
+            <a href="{{ url_for('download_report') }}">
+                <span class="nav-icon">📥</span>
+                Download Report
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('logout') }}" class="logout">
+                ↪ Logout
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+                <h2>Student Dashboard</h2>
+                <p>Monitor your academic performance and progress.</p>
+            </div>
 
             <div class="profile">
+
                 <div class="avatar">
                     {{ name[0]|upper if name else 'S' }}
                 </div>
-                <span>{{ name|title }}</span>
+
+                <div>
+                    <strong>{{ name|title if name else 'Student' }}</strong>
+                    <small>Student Account</small>
+                </div>
+
             </div>
 
-        </div>
+        </header>
 
-        <div class="welcome">
+        <!-- WELCOME HERO -->
 
-            <h1>Welcome, {{ name|title }}! 👋</h1>
+        <section class="hero">
 
-            <p>
-                Track your academic performance and get insights
-                to support your learning journey.
-            </p>
+            <div class="hero-content">
 
-        </div>
+                <div class="hero-tag">
+                    ✦ YOUR PERSONAL ACADEMIC SPACE
+                </div>
+
+                <h1>Welcome, {{ name|title if name else 'Student' }}! 👋</h1>
+
+                <p>
+                    Track your academic progress, discover useful insights
+                    and work towards your learning goals with StudentAI.
+                </p>
+
+                <a href="{{ url_for('prediction') }}" class="primary-btn">
+                    Generate New Prediction →
+                </a>
+
+            </div>
+
+        </section>
 
         <!-- STATISTICS -->
 
-        <div class="cards">
+        <section class="stats">
 
-            <div class="card">
-                <h4>Total Predictions</h4>
-                <h2>{{ total_predictions }}</h2>
+            <div class="stat-card">
+
+                <div class="stat-icon purple">📊</div>
+
+                <p>TOTAL PREDICTIONS</p>
+
+                <h2>{{ total_predictions|default(0) }}</h2>
+
                 <small>Your prediction records</small>
+
             </div>
 
-            <div class="card">
-                <h4>Account Type</h4>
-                <h2>Student</h2>
-                <small>Student account</small>
+            <div class="stat-card">
+
+                <div class="stat-icon blue">🎓</div>
+
+                <p>ACCOUNT TYPE</p>
+
+                <h2 style="font-size:21px;">Student</h2>
+
+                <small>Your StudentAI account</small>
+
             </div>
 
-            <div class="card">
-                <h4>System Status</h4>
-                <h2>Active</h2>
-                <small>Prediction system available</small>
+            <div class="stat-card">
+
+                <div class="stat-icon green">●</div>
+
+                <p>SYSTEM STATUS</p>
+
+                <h2 style="color:#16a36a;font-size:21px;">Active</h2>
+
+                <small>Dashboard is available</small>
+
             </div>
 
-        </div>
+        </section>
 
         <!-- LATEST PREDICTION -->
 
-        <div class="section">
+        <section class="section-card">
 
-            <h2 class="section-heading">Latest Prediction</h2>
+            <div class="section-heading">
+                <h2>📊 Latest Performance Prediction</h2>
+                <span>Academic Overview</span>
+            </div>
 
             {% if latest %}
 
-            <div class="prediction-result">
+            <div class="prediction-box">
 
-                <p>Your latest predicted performance is:</p>
+                <div class="performance-box">
 
-                <h3>{{ latest['performance'] }}</h3>
+                    <small>YOUR LATEST PREDICTED PERFORMANCE</small>
 
-                <p>Academic input details</p>
+                    <h2>{{ latest['performance'] }}</h2>
 
-                <div class="details-grid">
+                    <p>
+                        Your latest academic performance category
+                        generated by the prediction system.
+                    </p>
 
-                    <div class="detail">
-                        <span>Attendance</span>
+                </div>
+
+                <div class="detail-grid">
+
+                    <div class="detail-item">
+                        <small>Attendance</small>
                         <strong>{{ latest['attendance'] }}%</strong>
                     </div>
 
-                    <div class="detail">
-                        <span>Study Hours</span>
-                        <strong>{{ latest['study_hours'] }} hrs</strong>
+                    <div class="detail-item">
+                        <small>Study Hours</small>
+                        <strong>{{ latest['study_hours'] }}</strong>
                     </div>
 
-                    <div class="detail">
-                        <span>Previous Marks</span>
+                    <div class="detail-item">
+                        <small>Previous Marks</small>
                         <strong>{{ latest['previous_marks'] }}%</strong>
                     </div>
 
-                    <div class="detail">
-                        <span>Assignments</span>
+                    <div class="detail-item">
+                        <small>Assignments</small>
                         <strong>{{ latest['assignments'] }}%</strong>
                     </div>
 
@@ -555,342 +1070,155 @@
 
             </div>
 
-            <a href="{{ url_for('history') }}" class="btn">
-                View Prediction History
-            </a>
-
             {% else %}
 
-            <div class="empty">
-                <h3>No Prediction Available</h3>
-                <p>You have not generated any prediction yet.</p>
+            <div class="empty-state">
 
-                <a href="{{ url_for('prediction') }}" class="btn">
-                    Generate First Prediction
+                <div>📚</div>
+
+                <h3>No Prediction Yet</h3>
+
+                <p>
+                    Generate your first academic performance prediction.
+                </p>
+
+                <a href="{{ url_for('prediction') }}" class="primary-btn">
+                    Start Prediction →
                 </a>
+
             </div>
 
             {% endif %}
 
-        </div>
+        </section>
 
-        <!-- PERFORMANCE TRACKER -->
+        <!-- PERFORMANCE IMPROVEMENT TRACKER -->
 
-        <div class="tracker-section">
+        {% if tracker %}
 
-            <div class="tracker-heading">
+        <section class="section-card">
 
-                <div>
-                    <h2>Performance Improvement Tracker</h2>
-                    <p>
-                        Compare your latest prediction with your previous prediction.
-                    </p>
-                </div>
-
-                <span class="tracker-icon">📈</span>
-
+            <div class="section-heading">
+                <h2>📈 Performance Improvement Tracker</h2>
+                <span>Latest two records</span>
             </div>
-
-            {% if tracker %}
 
             <div class="tracker-grid">
 
-                <div class="tracker-card">
-                    <div class="tracker-label">Previous Marks Change</div>
+                <div class="tracker-item">
 
-                    <div class="tracker-value">
-                        {% if tracker.marks_change > 0 %}
-                        <span class="positive">↑ +{{ tracker.marks_change }}%</span>
-                        {% elif tracker.marks_change < 0 %} <span class="negative">↓ {{ tracker.marks_change }}%</span>
-                            {% else %}
-                            <span class="neutral">No Change</span>
-                            {% endif %}
-                    </div>
+                    <small>Previous Marks Change</small>
 
-                    <p>Compared with your previous entry</p>
+                    <strong
+                        class="{% if tracker.marks_change > 0 %}positive{% elif tracker.marks_change < 0 %}negative{% else %}neutral{% endif %}">
+                        {{ "%+.2f"|format(tracker.marks_change) }}%
+                    </strong>
+
                 </div>
 
-                <div class="tracker-card">
-                    <div class="tracker-label">Attendance Change</div>
+                <div class="tracker-item">
 
-                    <div class="tracker-value">
-                        {% if tracker.attendance_change > 0 %}
-                        <span class="positive">↑ +{{ tracker.attendance_change }}%</span>
-                        {% elif tracker.attendance_change < 0 %} <span class="negative">↓ {{ tracker.attendance_change
-                            }}%</span>
-                            {% else %}
-                            <span class="neutral">No Change</span>
-                            {% endif %}
-                    </div>
+                    <small>Attendance Change</small>
 
-                    <p>Attendance percentage difference</p>
+                    <strong
+                        class="{% if tracker.attendance_change > 0 %}positive{% elif tracker.attendance_change < 0 %}negative{% else %}neutral{% endif %}">
+                        {{ "%+.2f"|format(tracker.attendance_change) }}%
+                    </strong>
+
                 </div>
 
-                <div class="tracker-card">
-                    <div class="tracker-label">Study Hours Change</div>
+                <div class="tracker-item">
 
-                    <div class="tracker-value">
-                        {% if tracker.study_change > 0 %}
-                        <span class="positive">↑ +{{ tracker.study_change }} hrs</span>
-                        {% elif tracker.study_change < 0 %} <span class="negative">↓ {{ tracker.study_change }}
-                            hrs</span>
-                            {% else %}
-                            <span class="neutral">No Change</span>
-                            {% endif %}
-                    </div>
+                    <small>Study Hours Change</small>
 
-                    <p>Daily study hours difference</p>
+                    <strong
+                        class="{% if tracker.study_change > 0 %}positive{% elif tracker.study_change < 0 %}negative{% else %}neutral{% endif %}">
+                        {{ "%+.2f"|format(tracker.study_change) }} hours
+                    </strong>
+
                 </div>
 
-                <div class="tracker-card">
-                    <div class="tracker-label">Assignments Change</div>
+                <div class="tracker-item">
 
-                    <div class="tracker-value">
-                        {% if tracker.assignments_change > 0 %}
-                        <span class="positive">↑ +{{ tracker.assignments_change }}%</span>
-                        {% elif tracker.assignments_change < 0 %} <span class="negative">↓ {{ tracker.assignments_change
-                            }}%</span>
-                            {% else %}
-                            <span class="neutral">No Change</span>
-                            {% endif %}
-                    </div>
+                    <small>Assignments Change</small>
 
-                    <p>Assignment completion difference</p>
+                    <strong
+                        class="{% if tracker.assignments_change > 0 %}positive{% elif tracker.assignments_change < 0 %}negative{% else %}neutral{% endif %}">
+                        {{ "%+.2f"|format(tracker.assignments_change) }}%
+                    </strong>
+
                 </div>
 
             </div>
 
-            <div class="tracker-note">
-                <strong>Note:</strong>
-                This tracker compares the values entered in your two most
-                recent predictions. Changes do not automatically mean that
-                academic performance has improved or declined.
-            </div>
-
-            {% else %}
-
-            <div class="tracker-empty">
-                <div class="empty-icon">📊</div>
-                <h3>Not Enough Data Yet</h3>
-
-                <p>
-                    Generate at least two predictions to compare your progress.
-                </p>
-
-                <a href="{{ url_for('prediction') }}" class="tracker-button">
-                    Generate Prediction
-                </a>
-            </div>
-
-            {% endif %}
-
-        </div>
-
-        <!-- PERSONALIZED IMPROVEMENT SUGGESTIONS -->
-
-        <div class="section">
-
-            <h2 class="section-heading">
-                💡 Personalized Improvement Suggestions
-            </h2>
-
-            {% if tracker %}
-
-            <div class="suggestion-list">
-
-                {% if tracker.attendance_change < 0 %} <div class="suggestion-card">
-                    <h3>📅 Improve Attendance</h3>
-                    <p>
-                        Your attendance has decreased compared with your
-                        previous entry. Try maintaining a regular class
-                        attendance routine.
-                    </p>
-            </div>
-
-            {% elif tracker.attendance_change == 0 %}
-
-            <div class="suggestion-card">
-                <h3>📅 Maintain Attendance</h3>
-                <p>
-                    Your attendance value is unchanged. Continue
-                    maintaining a regular attendance routine.
-                </p>
-            </div>
-
-            {% else %}
-
-            <div class="suggestion-card">
-                <h3>🌟 Good Attendance Progress</h3>
-                <p>
-                    Your attendance value has increased. Keep
-                    maintaining this positive habit.
-                </p>
-            </div>
-
-            {% endif %}
-
-            {% if tracker.study_change < 0 %} <div class="suggestion-card">
-                <h3>📚 Build a Study Routine</h3>
-                <p>
-                    Your entered study hours have decreased.
-                    Try creating a consistent daily study schedule
-                    with manageable study sessions.
-                </p>
-        </div>
-
-        {% elif tracker.study_change == 0 %}
-
-        <div class="suggestion-card">
-            <h3>📚 Maintain Study Consistency</h3>
-            <p>
-                Your study hours are unchanged. Continue
-                following a balanced study routine.
+            <p class="tracker-note">
+                Comparison is based on the input values from your two latest
+                prediction records. Changes in these inputs do not necessarily
+                prove an improvement in actual academic results.
             </p>
-        </div>
 
-        {% else %}
-
-        <div class="suggestion-card">
-            <h3>🚀 Study Routine Progress</h3>
-            <p>
-                Your entered study hours have increased.
-                Keep your study sessions consistent and balanced.
-            </p>
-        </div>
+        </section>
 
         {% endif %}
-
-        {% if tracker.assignments_change < 0 %} <div class="suggestion-card">
-            <h3>📝 Focus on Assignments</h3>
-            <p>
-                Your assignment completion value has decreased.
-                Break assignments into smaller tasks and plan
-                time for completing them.
-            </p>
-    </div>
-
-    {% elif tracker.assignments_change == 0 %}
-
-    <div class="suggestion-card">
-        <h3>📝 Maintain Assignment Progress</h3>
-        <p>
-            Your assignment value is unchanged. Try
-            completing tasks regularly before deadlines.
-        </p>
-    </div>
-
-    {% else %}
-
-    <div class="suggestion-card">
-        <h3>✅ Assignment Progress</h3>
-        <p>
-            Your assignment completion value has increased.
-            Continue submitting your work on time.
-        </p>
-    </div>
-
-    {% endif %}
-
-    {% if tracker.marks_change < 0 %} <div class="suggestion-card">
-        <h3>📖 Revise Previous Topics</h3>
-        <p>
-            Your entered previous marks value has decreased.
-            Review difficult concepts and practise
-            relevant questions.
-        </p>
-        </div>
-
-        {% elif tracker.marks_change == 0 %}
-
-        <div class="suggestion-card">
-            <h3>🎯 Strengthen Your Concepts</h3>
-            <p>
-                Your previous marks entry is unchanged.
-                Focus on understanding concepts and regular revision.
-            </p>
-        </div>
-
-        {% else %}
-
-        <div class="suggestion-card">
-            <h3>🌟 Keep Learning</h3>
-            <p>
-                Your entered previous marks value has increased.
-                Continue practising and revising regularly.
-            </p>
-        </div>
-
-        {% endif %}
-
-        </div>
-
-        <div class="tracker-note">
-            <strong>Note:</strong>
-            These recommendations are generated using changes in
-            your two latest entries. They are learning suggestions,
-            not a guarantee of future academic results.
-        </div>
-
-        {% else %}
-
-        <div class="empty">
-            Generate at least two predictions to receive
-            personalized improvement suggestions.
-        </div>
-
-        {% endif %}
-
-        </div>
 
         <!-- EXPLORE DASHBOARD -->
 
-        <div class="section">
+        <section class="section-card">
 
-            <h2 class="section-heading">Explore Dashboard</h2>
+            <div class="section-heading">
+                <h2>🚀 Explore Your Dashboard</h2>
+                <span>Quick Access</span>
+            </div>
 
             <div class="explore-grid">
 
-                <div class="explore-card">
-                    <h3>🤖 Predict Performance</h3>
+                <a href="{{ url_for('prediction') }}" class="explore-item">
+
+                    <div class="explore-icon">🤖</div>
+
+                    <h3>Predict Performance</h3>
+
                     <p>
-                        Enter your academic details and generate
-                        a prediction using the machine learning model.
+                        Enter your academic details and generate a prediction.
                     </p>
 
-                    <a href="{{ url_for('prediction') }}" class="btn">
-                        Predict Now
-                    </a>
-                </div>
+                </a>
 
-                <div class="explore-card">
-                    <h3>📋 Prediction History</h3>
+                <a href="{{ url_for('history') }}" class="explore-item">
+
+                    <div class="explore-icon">📋</div>
+
+                    <h3>Prediction History</h3>
+
                     <p>
-                        View your previous predictions and
-                        track your academic records.
+                        Review your previous performance predictions.
                     </p>
 
-                    <a href="{{ url_for('history') }}" class="btn">
-                        View History
-                    </a>
-                </div>
+                </a>
 
-                <div class="explore-card">
-                    <h3>📊 Analytics Dashboard</h3>
+                <a href="{{ url_for('analytics') }}" class="explore-item">
+
+                    <div class="explore-icon">📈</div>
+
+                    <h3>View Analytics</h3>
+
                     <p>
-                        Explore performance statistics,
-                        charts and academic insights.
+                        Explore your academic data and performance insights.
                     </p>
 
-                    <a href="{{ url_for('analytics') }}" class="btn">
-                        View Analytics
-                    </a>
-                </div>
+                </a>
 
             </div>
 
-        </div>
+        </section>
 
-        </div>
+        <!-- FOOTER -->
+
+        <footer class="footer">
+            © 2026 StudentAI | Student Performance Prediction System
+        </footer>
+
+    </main>
 
 </body>
 
