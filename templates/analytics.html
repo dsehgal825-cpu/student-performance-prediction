@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | EduPredict</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f4f6fc;
+            color: #1e293b;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 255px;
+            min-height: 100vh;
+            background: #171b36;
+            color: white;
+            padding: 30px 18px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 23px;
+            font-weight: 800;
+            margin: 0 8px 45px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+        }
+
+        .brand span {
+            color: #a5b4fc;
+        }
+
+        .nav-title {
+            color: #79829f;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 0 13px;
+            margin-bottom: 15px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #b9bfd4;
+            text-decoration: none;
+            padding: 14px 13px;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: .25s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: linear-gradient(100deg, #4f46e5, #7065df);
+            color: white;
+            box-shadow: 0 7px 18px rgba(79, 70, 229, .25);
+        }
+
+        .nav-icon {
+            font-size: 17px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 18px 8px 0;
+            color: #79829f;
+            font-size: 10px;
+            line-height: 1.8;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            padding: 35px 38px;
+            min-width: 0;
+            max-width: 1700px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 26px;
+            color: #172033;
+            letter-spacing: -.7px;
+        }
+
+        .topbar p {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .profile {
+            background: white;
+            padding: 9px 15px 9px 9px;
+            border-radius: 13px;
+            box-shadow: 0 4px 15px #00000008;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 37px;
+            height: 37px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: #4f46e5;
+            font-weight: 800;
+        }
+
+        .profile strong {
+            color: #334155;
+            font-size: 12px;
+        }
+
+        .profile small {
+            display: block;
+            color: #94a3b8;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        /* WELCOME BANNER */
+
+        .welcome-banner {
+            padding: 27px 30px;
+            border-radius: 19px;
+            background: linear-gradient(110deg, #3730a3, #6366f1, #8b5cf6);
+            color: white;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, .16);
+        }
+
+        .welcome-banner::after {
+            content: "📊";
+            position: absolute;
+            right: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 76px;
+            opacity: .22;
+        }
+
+        .welcome-banner h2 {
+            font-size: 21px;
+            margin-bottom: 9px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-banner p {
+            font-size: 12px;
+            color: #e0e7ff;
+            line-height: 1.7;
+            max-width: 570px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* STATISTICS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 19px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 17px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, .04);
+            border: 1px solid #edf0f7;
+            transition: .25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(15, 23, 42, .08);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            font-size: 20px;
+        }
+
+        .purple-bg {
+            background: #ede9fe;
+        }
+
+        .gold-bg {
+            background: #fef3c7;
+        }
+
+        .blue-bg {
+            background: #dbeafe;
+        }
+
+        .stat-card h3 {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: .4px;
+        }
+
+        .stat-card h2 {
+            font-size: 29px;
+            margin-top: 8px;
+            color: #172033;
+        }
+
+        .stat-card small {
+            display: block;
+            margin-top: 6px;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        /* CONTENT GRID */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 21px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, .04);
+            border: 1px solid #edf0f7;
+            min-width: 0;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 7px;
+        }
+
+        .panel-heading h2 {
+            font-size: 16px;
+            color: #1e293b;
+        }
+
+        .panel-heading span {
+            font-size: 18px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-bottom: 27px;
+        }
+
+        /* PERFORMANCE BARS */
+
+        .performance-row {
+            margin-bottom: 23px;
+        }
+
+        .performance-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .performance-info span:first-child {
+            color: #334155;
+        }
+
+        .performance-info span:last-child {
+            color: #64748b;
+        }
+
+        .bar-background {
+            height: 10px;
+            background: #eef2f7;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: var(--bar-width, 0%);
+            border-radius: 20px;
+            transition: width 1s ease;
+        }
+
+        .high {
+            background: linear-gradient(90deg, #059669, #34d399);
+        }
+
+        .average {
+            background: linear-gradient(90deg, #d97706, #fbbf24);
+        }
+
+        .low {
+            background: linear-gradient(90deg, #dc2626, #f87171);
+        }
+
+        .excellent {
+            background: linear-gradient(90deg, #047857, #10b981);
+        }
+
+        .good {
+            background: linear-gradient(90deg, #4f46e5, #818cf8);
+        }
+
+        .poor {
+            background: linear-gradient(90deg, #b91c1c, #ef4444);
+        }
+
+        /* INSIGHTS */
+
+        .latest-box {
+            background: linear-gradient(130deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 26px;
+            border-radius: 16px;
+            margin-top: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .latest-box::after {
+            content: "✦";
+            position: absolute;
+            right: 20px;
+            top: 5px;
+            font-size: 75px;
+            color: rgba(255, 255, 255, .12);
+        }
+
+        .latest-box p {
+            color: #e0e7ff;
+            font-size: 11px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .latest-box h2 {
+            font-size: 27px;
+            margin-top: 11px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 7px 13px;
+            background: rgba(255, 255, 255, .18);
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 20px;
+            font-size: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .insight-text {
+            margin-top: 25px;
+            padding: 17px;
+            background: #f8fafc;
+            border-radius: 13px;
+            border: 1px solid #edf0f7;
+        }
+
+        .insight-text h3 {
+            font-size: 13px;
+            margin-bottom: 9px;
+            color: #334155;
+        }
+
+        .insight-text p {
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        /* EMPTY STATE */
+
+        .empty {
+            text-align: center;
+            padding: 45px 15px;
+            color: #94a3b8;
+            background: #f8fafc;
+            border-radius: 14px;
+            border: 1px dashed #dbe2ef;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 13px;
+        }
+
+        .empty h3 {
+            font-size: 15px;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        /* BUTTONS AND FOOTER */
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 19px;
+            background: linear-gradient(110deg, #4f46e5, #7c3aed);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .25s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(79, 70, 229, .25);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 0 5px;
+            color: #a0a9ba;
+            font-size: 10px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:1050px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media(max-width:700px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 16px;
+            }
+
+            .brand {
+                margin: 0 5px 18px;
+                font-size: 20px;
+            }
+
+            .nav-title,
+            .sidebar-footer {
+                display: none;
+            }
+
+            .nav {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+
+            .nav a {
+                flex-shrink: 0;
+                padding: 11px;
+                font-size: 11px;
+            }
+
+            .nav-icon {
+                display: none;
+            }
+
+            .main {
+                padding: 20px 14px;
+            }
+
+            .topbar h1 {
+                font-size: 22px;
+            }
+
+            .welcome-banner {
+                padding: 23px;
+            }
+
+            .welcome-banner::after {
+                right: 15px;
+                font-size: 45px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+        }
+
+        @media(max-width:400px) {
+            .performance-info {
+                font-size: 10px;
+            }
+
+            .profile {
+                padding: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">🎓</div>
+                <div>Edu<span>Predict</span></div>
+            </div>
+
+            <div class="nav-title">MAIN MENU</div>
+
+            <nav class="nav">
+
+                <a href="{{ url_for('dashboard') }}">
+                    <span class="nav-icon">🏠</span>
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('prediction') }}">
+                    <span class="nav-icon">📊</span>
+                    Prediction
+                </a>
+
+                <a href="{{ url_for('history') }}">
+                    <span class="nav-icon">📋</span>
+                    History
+                </a>
+
+                <a href="{{ url_for('analytics') }}" class="active">
+                    <span class="nav-icon">📈</span>
+                    Analytics
+                </a>
+
+                <a href="{{ url_for('download_report') }}">
+                    <span class="nav-icon">📥</span>
+                    Download Report
+                </a>
+
+                <a href="{{ url_for('logout') }}">
+                    <span class="nav-icon">↪</span>
+                    Logout
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                EduPredict Student Portal<br>
+                Learn. Analyze. Improve.
+            </div>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+
+        <main class="main">
+
+            <!-- TOPBAR -->
+
+            <div class="topbar">
+
+                <div>
+                    <h1>Analytics Dashboard</h1>
+                    <p>Understand your academic performance with insights.</p>
+                </div>
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        {{ session.get('name', 'Student')[0]|upper }}
+                    </div>
+
+                    <div>
+                        <strong>{{ session.get('name', 'Student')|title }}</strong>
+                        <small>Student Account</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- WELCOME BANNER -->
+
+            <section class="welcome-banner">
+
+                <h2>📈 Your Academic Overview</h2>
+
+                <p>
+                    Explore your prediction statistics and understand
+                    your academic performance through meaningful insights.
+                </p>
+
+            </section>
+
+            <!-- EXISTING BACKEND VARIABLES -->
+
+            {% set total = total_predictions|default(0) %}
+            {% set counts = performance_counts|default({}) %}
+            {% set percent_data = percentages|default({}) %}
+
+            <!-- STATISTICS -->
+
+            <section class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon purple-bg">📊</div>
+                    </div>
+
+                    <h3>TOTAL PREDICTIONS</h3>
+                    <h2>{{ total }}</h2>
+                    <small>Your total prediction records</small>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon gold-bg">🏆</div>
+                    </div>
+
+                    <h3>HIGH RESULTS</h3>
+                    <h2>{{ counts.get('High', 0) }}</h2>
+                    <small>Predictions in High category</small>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon blue-bg">📈</div>
+                    </div>
+
+                    <h3>AVERAGE RESULTS</h3>
+                    <h2>{{ counts.get('Average', 0) }}</h2>
+                    <small>Predictions in Average category</small>
+
+                </div>
+
+            </section>
+
+            <!-- ANALYTICS CONTENT -->
+
+            <section class="content-grid">
+
+                <!-- PERFORMANCE DISTRIBUTION -->
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <h2>Performance Distribution</h2>
+                        <span>📊</span>
+                    </div>
+
+                    <p class="subtitle">
+                        Category-wise prediction overview
+                    </p>
+
+                    {% if total > 0 %}
+
+                    {% for label in ['High', 'Average', 'Low', 'Excellent', 'Good', 'Poor'] %}
+
+                    {% set count = counts.get(label, 0) %}
+                    {% set percent = percent_data.get(label, 0) %}
+
+                    <div class="performance-row">
+
+                        <div class="performance-info">
+                            <span>{{ label }}</span>
+                            <span>{{ count }} ({{ percent }}%)</span>
+                        </div>
+
+                        <div class="bar-background">
+
+                            <div class="progress-bar {{ label|lower }}" style="--bar-width: {{ percent }}%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                    {% else %}
+
+                    <div class="empty">
+
+                        <div class="empty-icon">📚</div>
+
+                        <h3>No Analytics Available</h3>
+
+                        <p>
+                            Generate your first prediction
+                            to see your academic analytics here.
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- PERFORMANCE INSIGHTS -->
+
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <h2>Performance Insights</h2>
+                        <span>✨</span>
+                    </div>
+
+                    <p class="subtitle">
+                        Your latest academic overview
+                    </p>
+
+                    <div class="latest-box">
+
+                        <p>Latest Performance Status</p>
+
+                        <h2>{{ latest|default('No Data') }}</h2>
+
+                        <span class="status">
+                            {{ status|default('No Data') }}
+                        </span>
+
+                    </div>
+
+                    <div class="insight-text">
+
+                        <h3>🎯 Your Progress</h3>
+
+                        <p>
+                            Your academic analytics are based on predictions
+                            generated using attendance, study hours,
+                            previous marks and assignments.
+                        </p>
+
+                    </div>
+
+                    <div class="insight-text">
+
+                        <h3>💡 Keep Improving</h3>
+
+                        <p>
+                            Regularly review your academic information
+                            and use your prediction history to understand
+                            your progress over time.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <a href="{{ url_for('dashboard') }}" class="back-link">
+                ← Back to Dashboard
+            </a>
+
+            <div class="footer">
+                © 2026 EduPredict | Student Performance Prediction System
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

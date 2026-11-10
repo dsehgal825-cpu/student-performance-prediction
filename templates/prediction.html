@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Performance Prediction | EduPredict</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f4f5fb;
+            color: #252542;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #21154f, #392477);
+            color: white;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            margin-bottom: 45px;
+        }
+
+        .logo span {
+            color: #bda7ff;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ddd6f5;
+            padding: 14px 16px;
+            border-radius: 12px;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: #7053c9;
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 35px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .topbar h1 {
+            font-size: 27px;
+            color: #29204f;
+        }
+
+        .topbar p {
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .user {
+            background: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* HERO */
+
+        .hero {
+            background: linear-gradient(120deg, #5738a8, #8770e8);
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(83, 55, 163, 0.18);
+        }
+
+        .hero h2 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #eee8ff;
+            line-height: 1.6;
+        }
+
+        /* FORM CARD */
+
+        .content-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(30, 25, 70, 0.06);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 21px;
+            margin-bottom: 8px;
+            color: #30215f;
+        }
+
+        .section-description {
+            color: #85839a;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 9px;
+            color: #393454;
+        }
+
+        .form-group input {
+            padding: 14px;
+            border: 1px solid #dedbea;
+            border-radius: 11px;
+            outline: none;
+            font-size: 15px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #7955d6;
+            box-shadow: 0 0 0 3px rgba(121, 85, 214, 0.12);
+        }
+
+        .form-group small {
+            color: #999;
+            margin-top: 7px;
+            font-size: 12px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 28px;
+            padding: 15px;
+            background: linear-gradient(120deg, #5d3bb2, #8767e9);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(93, 59, 178, 0.25);
+        }
+
+        /* RESULT */
+
+        .result {
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 16px;
+            background: #f1edff;
+            border: 1px solid #ded4ff;
+            text-align: center;
+        }
+
+        .result-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .result h3 {
+            color: #4b3291;
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            font-size: 23px;
+            font-weight: 800;
+            color: #6847c1;
+        }
+
+        /* SUGGESTIONS */
+
+        .suggestions-box {
+            margin-top: 25px;
+            padding: 25px;
+            background: #f6f2ff;
+            border: 1px solid #e3d8ff;
+            border-radius: 18px;
+        }
+
+        .suggestions-box h3 {
+            color: #5838a6;
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        .suggestion-subtitle {
+            color: #77718a;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            background: white;
+            padding: 17px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(40, 20, 90, 0.04);
+        }
+
+        .suggestion-icon {
+            font-size: 23px;
+        }
+
+        .suggestion-item p {
+            color: #45415b;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .suggestion-note {
+            color: #888;
+            font-size: 12px;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        /* FLASH MESSAGES */
+
+        .flash-message {
+            padding: 14px 18px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background: #fff0f0;
+            color: #b42318;
+            font-size: 14px;
+        }
+
+        .flash-message.success {
+            background: #e9f9ef;
+            color: #18733c;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            padding: 20px 0;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 850px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+                padding: 22px;
+            }
+        }
+
+        @media(max-width: 650px) {
+
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 18px;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            .nav-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .nav-links a {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero {
+                padding: 22px;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                Edu<span>Predict</span>
+            </div>
+
+            <nav class="nav-links">
+
+                <a href="{{ url_for('dashboard') }}">
+                    🏠 Dashboard
+                </a>
+
+                <a href="{{ url_for('prediction') }}" class="active">
+                    🎯 Prediction
+                </a>
+
+                <a href="{{ url_for('history') }}">
+                    📚 History
+                </a>
+
+                <a href="{{ url_for('analytics') }}">
+                    📊 Analytics
+                </a>
+
+                <a href="{{ url_for('download_report') }}">
+                    📥 Download Report
+                </a>
+
+                <a href="{{ url_for('logout') }}">
+                    🚪 Logout
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- MAIN -->
+
+        <main class="main">
+
+            <div class="topbar">
+
+                <div>
+                    <h1>Performance Prediction</h1>
+                    <p>Analyze your academic performance</p>
+                </div>
+
+                <div class="user">
+                    👤 {{ session.get('name', 'Student') }}
+                </div>
+
+            </div>
+
+
+            <!-- HERO -->
+
+            <section class="hero">
+
+                <h2>Predict. Improve. Succeed. 🚀</h2>
+
+                <p>
+                    Enter your academic details to get your
+                    performance prediction and personalized
+                    improvement recommendations.
+                </p>
+
+            </section>
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+            <div class="flash-message {{ category }}">
+                {{ message }}
+            </div>
+
+            {% endfor %}
+
+            {% endwith %}
+
+
+            <!-- PREDICTION FORM -->
+
+            <section class="content-card">
+
+                <h2 class="section-title">
+                    Enter Academic Details
+                </h2>
+
+                <p class="section-description">
+                    Fill in all four fields to generate your prediction.
+                </p>
+
+
+                <form method="POST" action="{{ url_for('prediction') }}">
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="attendance">
+                                Attendance Percentage (%)
+                            </label>
+
+                            <input type="number" id="attendance" name="attendance" min="0" max="100" step="any"
+                                placeholder="Example: 85" required>
+
+                            <small>Enter a value between 0 and 100.</small>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="study_hours">
+                                Daily Study Hours
+                            </label>
+
+                            <input type="number" id="study_hours" name="study_hours" min="0" max="24" step="any"
+                                placeholder="Example: 4" required>
+
+                            <small>Enter your average daily study hours.</small>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="previous_marks">
+                                Previous Marks (%)
+                            </label>
+
+                            <input type="number" id="previous_marks" name="previous_marks" min="0" max="100" step="any"
+                                placeholder="Example: 75" required>
+
+                            <small>Enter your previous academic marks.</small>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="assignments">
+                                Assignment Completion (%)
+                            </label>
+
+                            <input type="number" id="assignments" name="assignments" min="0" max="100" step="any"
+                                placeholder="Example: 90" required>
+
+                            <small>Enter your assignment completion percentage.</small>
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit" class="submit-btn">
+                        🚀 Generate Prediction
+                    </button>
+
+                </form>
+
+
+                <!-- PREDICTION RESULT -->
+
+                {% if prediction or result %}
+
+                <div class="result">
+
+                    <div class="result-icon">
+                        🎯
+                    </div>
+
+                    <h3>Your Performance Prediction</h3>
+
+                    <p>{{ prediction or result }}</p>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- PERSONALIZED SUGGESTIONS -->
+
+                {% if suggestions %}
+
+                <div class="suggestions-box">
+
+                    <h3>
+                        🤖 Personalized Improvement Suggestions
+                    </h3>
+
+                    <p class="suggestion-subtitle">
+                        Based on your academic details, here are
+                        some recommendations to help improve
+                        your learning and performance.
+                    </p>
+
+                    {% for suggestion in suggestions %}
+
+                    <div class="suggestion-item">
+
+                        <span class="suggestion-icon">
+                            💡
+                        </span>
+
+                        <p>
+                            {{ suggestion }}
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                    <p class="suggestion-note">
+                        These are input-based study recommendations.
+                        Your actual academic progress may vary.
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <div class="footer">
+                © 2026 EduPredict | Student Performance Prediction System
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

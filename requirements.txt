@@ -1,0 +1,6 @@
+Flask
+Flask-WTF
+Werkzeug
+gunicorn
+scikit-learn
+numpy

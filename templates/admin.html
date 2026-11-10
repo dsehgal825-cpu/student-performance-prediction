@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | EduPredict</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f5fb;
+            color: #20243a;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #171b36;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 45px;
+        }
+
+        .logo span {
+            color: #a99cff;
+        }
+
+        .menu-title {
+            color: #969bb8;
+            font-size: 12px;
+            margin: 20px 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .menu a {
+            display: block;
+            color: #d7d9e9;
+            padding: 14px 15px;
+            text-decoration: none;
+            border-radius: 9px;
+            margin-bottom: 9px;
+            transition: 0.3s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #6658e8;
+            color: white;
+        }
+
+        .main {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .topbar h1 {
+            font-size: 27px;
+        }
+
+        .admin-info {
+            background: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px #00000008;
+        }
+
+        .welcome {
+            background: linear-gradient(120deg, #5143cf, #8875f5);
+            color: white;
+            padding: 30px;
+            border-radius: 17px;
+            margin-bottom: 28px;
+        }
+
+        .welcome h2 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px #00000008;
+            border: 1px solid #eee;
+        }
+
+        .card-icon {
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .card h2 {
+            font-size: 32px;
+            color: #6658e8;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 25px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px #00000008;
+            margin-bottom: 25px;
+        }
+
+        .panel h3 {
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #6658e8;
+            color: white;
+            padding: 13px 19px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #5042c9;
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: #171b36;
+        }
+
+        .btn.secondary:hover {
+            background: #30365d;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 550px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f5f4ff;
+            color: #555;
+        }
+
+        .status {
+            background: #e5f8ed;
+            color: #16834b;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .category {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .empty {
+            color: #888;
+            padding: 15px 0;
+        }
+
+        .logout {
+            background: #ef476f !important;
+            margin-top: 25px;
+        }
+
+        .flash {
+            background: #e5f8ed;
+            color: #16834b;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        @media(max-width: 1000px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 700px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            .menu-title {
+                display: none;
+            }
+
+            .menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .menu a {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🎓 Edu<span>Predict</span>
+        </div>
+
+        <p class="menu-title">MAIN MENU</p>
+
+        <nav class="menu">
+
+            <a href="{{ url_for('admin') }}" class="active">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('admin_students') }}">
+                👨‍🎓 Students
+            </a>
+
+            <a href="{{ url_for('admin_predictions') }}">
+                📊 All Predictions
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="logout">
+                🚪 Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p style="color:#888;margin-top:7px;">
+                    Overview of your student performance system
+                </p>
+            </div>
+
+            <div class="admin-info">
+                👤 Project Admin
+            </div>
+
+        </div>
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome">
+
+            <h2>Welcome, Administrator! 👋</h2>
+
+            <p>
+                Manage students, monitor academic predictions
+                and track the performance of your institution
+                through EduPredict.
+            </p>
+
+        </section>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
+
+
+        <!-- STATISTICS -->
+
+        <section class="cards">
+
+            <div class="card">
+                <div class="card-icon">👨‍🎓</div>
+                <p>Total Registered Students</p>
+                <h2>{{ total_students }}</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <p>Total Predictions</p>
+                <h2>{{ total_predictions }}</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🟢</div>
+                <p>System Status</p>
+                <h2 style="font-size:24px;color:#16a36a;">
+                    Active
+                </h2>
+            </div>
+
+        </section>
+
+
+        <!-- MANAGEMENT -->
+
+        <section class="panel">
+
+            <h3>⚙️ Management Center</h3>
+
+            <div class="actions">
+
+                <a href="{{ url_for('admin_students') }}" class="btn">
+                    👨‍🎓 View All Students
+                </a>
+
+                <a href="{{ url_for('admin_predictions') }}" class="btn secondary">
+                    📊 View All Predictions
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- PERFORMANCE OVERVIEW -->
+
+        <section class="content-grid">
+
+            <div class="panel">
+
+                <h3>📈 Performance Overview</h3>
+
+                {% for item in performance_counts %}
+
+                <div class="category">
+
+                    <span>{{ item['performance'] }}</span>
+
+                    <strong>{{ item['total'] }}</strong>
+
+                </div>
+
+                {% else %}
+
+                <p class="empty">
+                    No performance records available yet.
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="panel">
+
+                <h3>🚀 Quick Information</h3>
+
+                <div class="category">
+                    <span>Student Accounts</span>
+                    <strong>{{ total_students }}</strong>
+                </div>
+
+                <div class="category">
+                    <span>Prediction Records</span>
+                    <strong>{{ total_predictions }}</strong>
+                </div>
+
+                <div class="category">
+                    <span>Machine Learning</span>
+                    <strong>KNN</strong>
+                </div>
+
+                <div class="category">
+                    <span>Database</span>
+                    <strong>SQLite</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT PREDICTIONS -->
+
+        <section class="panel">
+
+            <h3>🕒 Recent Student Predictions</h3>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Performance</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in recent_predictions %}
+
+                        <tr>
+
+                            <td>{{ item['name'] or 'Unknown' }}</td>
+
+                            <td>{{ item['email'] or '-' }}</td>
+
+                            <td>
+                                <span class="status">
+                                    {{ item['performance'] }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ item['created_at'] or '-' }}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="4">
+                                No predictions available yet.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <p style="text-align:center;color:#999;padding:20px;">
+            © 2026 EduPredict | Student Performance Prediction System
+        </p>
+
+    </main>
+
+</body>
+
+</html>

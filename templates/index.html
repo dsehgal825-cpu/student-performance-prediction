@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | StudentAI</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0b1020;
+            color: white;
+        }
+
+        .sidebar {
+            width: 245px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #111a30;
+            padding: 25px 20px;
+            border-right: 1px solid #293653;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #a78bfa;
+            margin-bottom: 45px;
+        }
+
+        .menu-title {
+            color: #8291ad;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #cbd5e1;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: linear-gradient(120deg, #7c3aed, #2563eb);
+            color: white;
+        }
+
+        .logout-link {
+            margin-top: 35px;
+            color: #fca5a5 !important;
+        }
+
+        .main {
+            margin-left: 245px;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 27px;
+        }
+
+        .topbar p {
+            color: #9ca9c5;
+            margin-top: 8px;
+        }
+
+        .model-badge {
+            background: #29204b;
+            color: #c4b5fd;
+            padding: 12px 18px;
+            border-radius: 25px;
+            border: 1px solid #553c9a;
+            font-size: 13px;
+        }
+
+        .welcome {
+            padding: 35px;
+            border-radius: 18px;
+            background: linear-gradient(120deg, #5b21b6, #1d4ed8);
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 27px;
+            margin-bottom: 13px;
+        }
+
+        .welcome p {
+            color: #e0e7ff;
+            line-height: 1.6;
+        }
+
+        .form-card {
+            background: #151f36;
+            border: 1px solid #293653;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #9ca9c5;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px;
+            background: #0f1930;
+            border: 1px solid #34425f;
+            border-radius: 10px;
+            outline: none;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 2px #8b5cf633;
+        }
+
+        .form-group small {
+            display: block;
+            color: #8da0c2;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 28px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(120deg, #7c3aed, #2563eb);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .predict-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .result {
+            background: #152c35;
+            border: 1px solid #287d62;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .result h2 {
+            color: #4ade80;
+            margin-bottom: 12px;
+        }
+
+        .result p {
+            color: #d1fae5;
+        }
+
+        .flash-message {
+            background: #312e81;
+            border: 1px solid #6366f1;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #ddd6fe;
+        }
+
+        .info {
+            color: #8da0c2;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 18px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        @media(max-width: 700px) {
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome {
+                padding: 25px;
+            }
+
+            .welcome h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">Student<span style="color:white;">Predict</span></div>
+
+        <p class="menu-title">MAIN MENU</p>
+
+        <a href="{{ url_for('home') }}" class="active">
+            🏠 Dashboard
+        </a>
+
+        <a href="{{ url_for('analytics') }}">
+            📊 Analytics
+        </a>
+
+        <a href="{{ url_for('history') }}">
+            📚 Prediction History
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="logout-link">
+            🚪 Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN DASHBOARD -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div>
+                <h1>Student Dashboard</h1>
+                <p>
+                    Welcome, {{ session.get('student_name', 'Student') }}!
+                    Welcome to your academic performance system.
+                </p>
+            </div>
+
+            <div class="model-badge">
+                ✨ KNN Machine Learning
+            </div>
+
+        </div>
+
+
+        <!-- WELCOME SECTION -->
+
+        <section class="welcome">
+
+            <h2>Student Performance Prediction</h2>
+
+            <p>
+                Analyze your academic details and generate a performance
+                prediction using a K-Nearest Neighbors (KNN) model.
+            </p>
+
+        </section>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="flash-message">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+
+        <!-- PREDICTION RESULT -->
+
+        {% if prediction %}
+
+        <div class="result">
+
+            <h2>✨ Your Performance Prediction</h2>
+
+            <p>
+                Predicted Performance:
+                <strong>{{ prediction }}</strong>
+            </p>
+
+            <p style="margin-top: 10px;">
+                Prediction generated using your academic details
+                and the KNN Machine Learning model.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- PREDICTION FORM -->
+
+        <section class="form-card">
+
+            <h2>Enter Academic Details</h2>
+
+            <p class="subtitle">
+                Fill in the details below to generate your prediction.
+            </p>
+
+            <form method="POST" action="{{ url_for('home') }}">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="attendance">
+                            Attendance (%)
+                        </label>
+
+                        <input type="number" id="attendance" name="attendance" placeholder="Example: 85" min="0"
+                            max="100" step="any" required>
+
+                        <small>Enter attendance between 0 and 100.</small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="study_hours">
+                            Study Hours (per day)
+                        </label>
+
+                        <input type="number" id="study_hours" name="study_hours" placeholder="Example: 5" min="0"
+                            max="24" step="any" required>
+
+                        <small>Enter daily study hours.</small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="previous_marks">
+                            Previous Marks (%)
+                        </label>
+
+                        <input type="number" id="previous_marks" name="previous_marks" placeholder="Example: 80" min="0"
+                            max="100" step="any" required>
+
+                        <small>Enter previous academic marks.</small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="assignments">
+                            Assignments Completed (%)
+                        </label>
+
+                        <input type="number" id="assignments" name="assignments" placeholder="Example: 90" min="0"
+                            max="100" step="any" required>
+
+                        <small>Enter assignment completion percentage.</small>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="predict-btn">
+                    ✨ Predict My Performance
+                </button>
+
+            </form>
+
+            <p class="info">
+                Note: Predictions are generated by the trained KNN model
+                and are intended for educational demonstration.
+                They should not be treated as a definitive assessment
+                of academic ability.
+            </p>
+
+        </section>
+
+
+        <div class="footer">
+            © 2026 devyani sehgal | Student Performance Prediction System
+        </div>
+
+    </main>
+
+</body>
+
+</html>

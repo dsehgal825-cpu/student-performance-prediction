@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>All Predictions | EduPredict</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4fa;
+            color: #20243a;
+        }
+
+        header {
+            background: #171b36;
+            color: white;
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .container {
+            padding: 35px 6%;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: #6658e8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #20243a10;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f3f2ff;
+        }
+
+        .result {
+            background: #e5f8ed;
+            color: #16834b;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        @media(max-width: 600px) {
+            .container {
+                padding: 22px 4%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>🎓 EduPredict Admin</h2>
+        <a href="{{ url_for('logout') }}" style="color:white;text-decoration:none;">
+            Logout
+        </a>
+    </header>
+
+    <div class="container">
+
+        <a href="{{ url_for('admin') }}" class="back">
+            ← Back to Dashboard
+        </a>
+
+        <div class="panel">
+
+            <h1>All Student Predictions</h1>
+
+            <p class="subtitle">
+                Monitor performance predictions of registered students.
+            </p>
+
+            <div class="table-wrap">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Student</th>
+                            <th>Email</th>
+                            <th>Attendance</th>
+                            <th>Study Hours</th>
+                            <th>Previous Marks</th>
+                            <th>Assignments</th>
+                            <th>Result</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in predictions %}
+
+                        <tr>
+                            <td>{{ item['id'] }}</td>
+                            <td>{{ item['name'] or 'Unknown' }}</td>
+                            <td>{{ item['email'] or '-' }}</td>
+                            <td>{{ item['attendance'] }}%</td>
+                            <td>{{ item['study_hours'] }}</td>
+                            <td>{{ item['previous_marks'] }}</td>
+                            <td>{{ item['assignments'] }}%</td>
+                            <td>
+                                <span class="result">
+                                    {{ item['performance'] }}
+                                </span>
+                            </td>
+                            <td>{{ item['created_at'] or '-' }}</td>
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="9">
+                                No predictions available yet.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

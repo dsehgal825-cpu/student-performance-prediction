@@ -1,0 +1,21 @@
+
+# Database files - never upload
+*.db
+*.sqlite
+*.sqlite3
+
+# Secret and environment files
+.env
+.env.*
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+
+# IDE files
+.vscode/

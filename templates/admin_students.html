@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students - Admin</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #312e81, #4f46e5);
+            color: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .top-links {
+            margin-top: 18px;
+        }
+
+        .top-links a {
+            color: white;
+            text-decoration: none;
+            margin-right: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        button,
+        .export-btn {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        button:hover,
+        .export-btn:hover {
+            background: #3730a3;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #eef2ff;
+            color: #312e81;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .view-btn {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            padding: 8px 12px;
+        }
+
+        .delete-btn:hover {
+            background: #991b1b;
+        }
+
+        .flash {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media(max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>Admin - Manage Students</h1>
+            <p>View, search and manage registered students.</p>
+
+            <div class="top-links">
+                <a href="{{ url_for('admin') }}">Admin Dashboard</a>
+                <a href="{{ url_for('admin_predictions') }}">All Predictions</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
+
+        <div class="card">
+            <h2 style="margin-bottom: 18px;">Search Students</h2>
+
+            <form method="GET" action="{{ url_for('admin_students') }}" class="search-form">
+
+                <input type="text" name="search" placeholder="Search by name or email..."
+                    value="{{ request.args.get('search', '') }}">
+
+                <select name="filter_type">
+                    <option value="all" {% if request.args.get('filter_type', request.args.get('filter', 'all' ))=='all'
+                        %}selected{% endif %}>
+                        All Students
+                    </option>
+
+                    <option value="student" {% if request.args.get('filter_type', request.args.get('filter', ''
+                        ))=='student' %}selected{% endif %}>
+                        Students Only
+                    </option>
+
+                    <option value="admin" {% if request.args.get('filter_type', request.args.get('filter', ''
+                        ))=='admin' %}selected{% endif %}>
+                        Admins Only
+                    </option>
+                </select>
+
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="card">
+
+            <div style="display:flex; justify-content:space-between;
+                    align-items:center; gap:15px; flex-wrap:wrap;
+                    margin-bottom:20px;">
+
+                <h2>Registered Users</h2>
+
+                <a href="{{ url_for('export_students') }}" class="export-btn">
+                    Export CSV
+                </a>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student['id'] }}</td>
+                            <td>{{ student['name'] }}</td>
+                            <td>{{ student['email'] }}</td>
+                            <td>{{ student['role'] }}</td>
+
+                            <td>
+                                <a class="view-btn"
+                                    href="{{ url_for('admin_student_detail', student_id=student['id']) }}">
+                                    View Details
+                                </a>
+                            </td>
+
+                            <td>
+                                {% if student['role'] != 'admin' %}
+                                <form method="POST" action="{{ url_for('delete_student', student_id=student['id']) }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this student?');">
+
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                                    <button type="submit" class="delete-btn">
+                                        Delete
+                                    </button>
+                                </form>
+                                {% else %}
+                                Protected
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="empty">
+                                No students found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

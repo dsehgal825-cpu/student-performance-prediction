@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details | EduPredict</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            padding: 30px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header,
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        h1,
+        h2 {
+            color: #172554;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 10px 16px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .item {
+            background: #eff6ff;
+            padding: 18px;
+            border-radius: 9px;
+        }
+
+        .item span {
+            display: block;
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .item strong {
+            color: #1e40af;
+            overflow-wrap: anywhere;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .empty {
+            text-align: center;
+            color: #64748b;
+        }
+
+        @media(max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <h1>Student Details</h1>
+            <p>Complete student profile and academic performance.</p>
+
+            <a href="{{ url_for('admin_students') }}" class="back">
+                Back to Students
+            </a>
+        </div>
+
+        <div class="card">
+            <h2>Personal Information</h2>
+
+            <div class="details">
+                <div class="item">
+                    <span>Student ID</span>
+                    <strong>{{ student['id'] }}</strong>
+                </div>
+
+                <div class="item">
+                    <span>Student Name</span>
+                    <strong>{{ student['name'] }}</strong>
+                </div>
+
+                <div class="item">
+                    <span>Email Address</span>
+                    <strong>{{ student['email'] }}</strong>
+                </div>
+
+                <div class="item">
+                    <span>Account Role</span>
+                    <strong>{{ student['role'] }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Prediction History</h2>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attendance</th>
+                            <th>Study Hours</th>
+                            <th>Previous Marks</th>
+                            <th>Assignments</th>
+                            <th>Performance</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for prediction in predictions %}
+                        <tr>
+                            <td>{{ prediction['attendance'] }}%</td>
+                            <td>{{ prediction['study_hours'] }}</td>
+                            <td>{{ prediction['previous_marks'] }}</td>
+                            <td>{{ prediction['assignments'] }}%</td>
+                            <td>{{ prediction['performance'] }}</td>
+                            <td>{{ prediction['created_at'] }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="empty">
+                                No prediction history available.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
